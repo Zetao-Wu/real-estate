@@ -1,7 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import userRouter from "./routes/user.routes.js";
+import cors from "cors";
 dotenv.config();
+
+const app = express();
+
+app.use(cors());
+
 
 mongoose
     .connect(process.env.dbURI)
@@ -15,4 +22,6 @@ mongoose
         console.log(err)
     })
 
-const app = express();
+
+
+app.use('/api/user', userRouter);
