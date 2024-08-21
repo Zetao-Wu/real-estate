@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice.js";
 import axios from "axios";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -17,23 +23,19 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(signInStart());
     try {
       const res = await axios.post("/api/auth/signin", formData);
       const data = res.data;
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
-      setFormData({ username: '', password: '' });
-      navigate('/home');
+      dispatch(signInSuccess(data));
+      setFormData({ username: "", password: "" });
+      navigate("/home");
     } catch (err) {
-      setLoading(false);
-      setError(err.response ? err.response.data.message : err.message);
-
+      dispatch(signInFailure(err.response ? err.response.data.message : err.message));
     }
   };
 
@@ -68,7 +70,7 @@ const SignIn = () => {
           <span className="text-blue-500 hover:underline">Sign Up</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
+      {error && <p className="text-red-500 mt-5">{typeof error === 'string' ? error : JSON.stringify(error)}</p>}
     </div>
   );
 };
