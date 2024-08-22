@@ -10,16 +10,15 @@ export const test = (req, res) => {
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
-    return next(errorHandler(401, "You can only update your own account"));
+    return next(errorHandler(401, 'You can only update your own account!'));
   try {
     if (req.body.password) {
-      req.body.password = await bcrypt.hash(req.body.password, 10);
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
-    // Finding the ID in the databse and updating the user
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
-        // we will need to get the old information as well, the $set will limit the input fields that is required so peopel can't directly setAdmin to true or something similar
         $set: {
           username: req.body.username,
           email: req.body.email,
@@ -33,7 +32,7 @@ export const updateUser = async (req, res, next) => {
     const { password, ...rest } = updatedUser._doc;
 
     res.status(200).json(rest);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
