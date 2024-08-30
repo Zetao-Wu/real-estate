@@ -29,21 +29,28 @@ const UpdateListing = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
-  
+
   useEffect(() => {
     const fetchListing = async () => {
-      const listingId = params.listingId;
-      const res = await fetch(`/api/listing/get/${listingId}`);
-      const data = await res.json();
-      if (data.success === false) {
-        console.log(data.message);
-        return;
+      const listingId = params.listingId; // Use the correct parameter name from the route
+      try {
+        const res = await fetch(`/api/listing/get/${listingId}`);
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          setError(data.message || "Failed to fetch listing");
+          return;
+        }
+        setFormData(data); // Ensure data structure matches formData structure
+      } catch (err) {
+        console.error("Error fetching listing:", err);
+        setError("Failed to fetch listing details.");
       }
-      setFormData(data);
     };
 
     fetchListing();
-  }, []);
+  }, [params.listingID]); // Add listingID as a dependency
+
 
   const handleImageSubmit = (e) => {
     const totalImages = files.length + formData.imageUrls.length;
@@ -162,7 +169,8 @@ const UpdateListing = () => {
 
       setLoading(true);
       setError(false);
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
+        // Use update API endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -174,10 +182,11 @@ const UpdateListing = () => {
       });
       const data = await res.json();
       setLoading(false);
-      if (data.success === false) {
+      if (!res.ok) {
         setError(data.message);
+      } else {
+        navigate(`/listing/${data._id}`);
       }
-      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -187,7 +196,7 @@ const UpdateListing = () => {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
+        Update Listing
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -362,7 +371,7 @@ const UpdateListing = () => {
             disabled={loading || uploading}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80"
           >
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? "Updating..." : "Update Listing"}
           </button>
           {error && <p className="text-red-700">{error}</p>}
 
