@@ -34,7 +34,7 @@ const SignIn = () => {
       }
       dispatch(signInSuccess(data));
       setFormData({ username: "", password: "" });
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       dispatch(signInFailure(err.response ? err.response.data.message : err.message));
     }
