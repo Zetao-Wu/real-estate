@@ -215,10 +215,10 @@ const Search = () => {
               id="sort_order"
               className="border rounded-lg p-3"
             >
-              <option value="regularPrice_desc">Price High to Low</option>
-              <option value="regularPrice_asc">Price Low to High</option>
               <option value="createdAt_desc">Latest Listing</option>
               <option value="createdAt_asc">Oldest Listing</option>
+              <option value="regularPrice_desc">Price High to Low</option>
+              <option value="regularPrice_asc">Price Low to High</option>
             </select>
           </div>
           <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90">
