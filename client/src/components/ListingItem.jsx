@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
-import { list } from "postcss";
 
 const ListingItem = ({ listing }) => {
   return (
@@ -20,7 +19,7 @@ const ListingItem = ({ listing }) => {
             <MdLocationOn className="h-4 w-4 text-green-700" />
             <p className="text-sm text-gray-600 truncate">{listing.address}</p>
           </div>
-          <p className="text-sm text-gray-600 line-clamp-2">
+          <p className="text-sm text-gray-600 truncate">
             {listing.description}
           </p>
           <p className="text-slate-700 mt-2 font-semibold flex items-center">
