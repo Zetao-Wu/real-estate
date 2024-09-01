@@ -99,7 +99,7 @@ const Home = () => {
                 Show More Offers
               </Link>
               </div>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap lg:flex-nowrap gap-4">
                 { offerListings.map((listing) => (
                   <ListingItem listing={listing} key={listing._id}/>
                 ))}
@@ -114,7 +114,7 @@ const Home = () => {
                 Show More Places For Rent
               </Link>
               </div>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap lg:flex-nowrap gap-4">
                 { rentListings.map((listing) => (
                   <ListingItem listing={listing} key={listing._id}/>
                 ))}
@@ -129,7 +129,7 @@ const Home = () => {
                 Show More Places For Sale
               </Link>
               </div>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap lg:flex-nowrap gap-4">
                 { saleListings.map((listing) => (
                   <ListingItem listing={listing} key={listing._id}/>
                 ))}
