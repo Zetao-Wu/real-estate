@@ -18,7 +18,7 @@ mongoose
   .connect(process.env.dbURI)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(3000, () => {
+    app.listen(3000, '0.0.0.0',() => {
       console.log("Sever is running on port 3000");
     });
   })
