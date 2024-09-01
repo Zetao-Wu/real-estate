@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ListingItem from "../components/ListingItem";
 
 const Search = () => {
   const [sidebardata, setSidebardata] = useState({
@@ -13,20 +14,20 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
 
-  console.log(listings)
+  console.log(listings);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm') || '';
-    const typeFromUrl = urlParams.get('type') || 'all';
-    const parkingFromUrl = urlParams.get('parking') === 'true';
-    const furnishedFromUrl = urlParams.get('furnished') === 'true';
-    const offerFromUrl = urlParams.get('offer') === 'true';
-    const sortFromUrl = urlParams.get('sort') || 'created_at';
-    const orderFromUrl = urlParams.get('order') || 'desc';
-  
+    const searchTermFromUrl = urlParams.get("searchTerm") || "";
+    const typeFromUrl = urlParams.get("type") || "all";
+    const parkingFromUrl = urlParams.get("parking") === "true";
+    const furnishedFromUrl = urlParams.get("furnished") === "true";
+    const offerFromUrl = urlParams.get("offer") === "true";
+    const sortFromUrl = urlParams.get("sort") || "created_at";
+    const orderFromUrl = urlParams.get("order") || "desc";
+
     setSidebardata({
       searchTerm: searchTermFromUrl,
       type: typeFromUrl,
@@ -36,7 +37,7 @@ const Search = () => {
       sort: sortFromUrl,
       order: orderFromUrl,
     });
-  
+
     const fetchListings = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
@@ -45,10 +46,9 @@ const Search = () => {
       setListings(data);
       setLoading(false);
     };
-  
+
     fetchListings();
   }, [location.search]);
-  
 
   const handleChange = (e) => {
     if (
@@ -102,7 +102,6 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
-
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -206,8 +205,19 @@ const Search = () => {
           </button>
         </form>
       </div>
-      <div className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
-        <h1>Listing Results:</h1>
+      <div className="flex-1">
+        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5 ">
+          Listing Results:
+        </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700">No Listing Found!</p>
+          )}
+          {loading && (
+            <p className="text-xl text-center text-slate-700 w-4">Loading...</p>
+          )}
+          {!loading && listings && listings.map((listing) => <ListingItem key={listing._id} listing={listing}/>)}
+        </div>
       </div>
     </div>
   );
